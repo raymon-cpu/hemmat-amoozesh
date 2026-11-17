@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فیزیک | سامانه آموزشی</title>
+
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css">
+
+    <style>
+        :root {
+            --bg: #f1f5f9;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --primary: #2563eb;
+        }
+
+        .dark-theme {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f1f5f9;
+            --primary: #38bdf8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Vazirmatn", sans-serif;
+            transition: background 0.3s ease;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+        }
+
+        h1 {
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        h2 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-size: 1.4rem;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            justify-content: center;
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .card {
+            padding: 1.8rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            background: var(--card-bg);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 15px rgba(37, 99, 235, 0.12);
+        }
+
+        .card .icon {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-size: 2.8rem;
+        }
+
+        .back-btn {
+            margin-top: 2rem;
+            border: none;
+            background: none;
+            color: var(--primary);
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .exercise-box {
+            margin-top: 1rem;
+            padding: 2rem 1.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.03);
+            text-align: center;
+        }
+
+        .answer-box {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background: #dcfce7;
+            color: #166534;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .nav-btns {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            flex: 1;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn-blue {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-green {
+            background: #10b981;
+            color: white;
+        }
+
+        .popup-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .popup-overlay.show {
+            display: flex;
+        }
+
+        .popup {
+            width: 100%;
+            max-width: 360px;
+            padding: 1.6rem;
+            border-radius: 16px;
+            background: var(--card-bg);
+            color: var(--text);
+            text-align: center;
+        }
+
+        .popup h2 {
+            margin-bottom: 1rem;
+        }
+
+        .popup label {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .popup select {
+            width: 100%;
+            margin: 6px 0 14px;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font: inherit;
+        }
+
+        .exam-answer-input {
+            width: 100%;
+            min-height: 110px;
+            margin-top: 14px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font: inherit;
+            resize: vertical;
+            text-align: right;
+        }
+
+        .exam-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 10px;
+            color: var(--text);
+            font-weight: bold;
+        }
+
+        .result-item {
+            margin-top: 12px;
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            line-height: 1.8;
+            text-align: right;
+        }
+
+        body.dark-theme .exercise-box,
+        body.dark-theme .card {
+            border-color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <!-- منوی فیزیک -->
+        <section id="step2">
+            <h1>فیزیک ⚛️</h1>
+            <div class="options">
+                <div class="card" onclick="showStep('step3Exercise')">
+                    <span class="icon">✏️</span>
+                    <h3>تمرین</h3>
+                </div>
+                <div class="card" onclick="openExamSetup()">
+                    <span class="icon">📝</span>
+                    <h3>آزمون</h3>
+                </div>
+                <div class="card" onclick="openJozveMenu()">
+                    <span class="icon">📚</span>
+                    <h3>جزوه</h3>
+                </div>
+            </div>
+            <button class="back-btn" onclick="location.href='index.html'">← بازگشت به صفحه اول</button>
+        </section>
+
+        <!-- بخش تمرین -->
+        <section id="step3Exercise" class="hidden">
+            <h1>بخش تمرین ✏️</h1>
+            <div class="options">
+                <div class="card" onclick="showStep('step4Chapters')">
+                    <span class="icon">📖</span>
+                    <h3>انتخاب فصل</h3>
+                </div>
+                <div class="card" onclick="openPopup()">
+                    <span class="icon">🎲</span>
+                    <h3>شانسی</h3>
+                </div>
+            </div>
+            <button class="back-btn" onclick="showStep('step2')">← بازگشت</button>
+        </section>
+
+        <!-- انتخاب فصل -->
+        <section id="step4Chapters" class="hidden">
+            <h1>انتخاب فصل 📖</h1>
+            <div class="options">
+                <div class="card" onclick="openPracticeSetup()">
+                    <span class="icon">🔋</span>
+                    <h3>فصل ۹</h3>
+                    <p style="font-size: 0.8rem; opacity: 0.7;">الکتریسیته</p>
+                </div>
+            </div>
+            <button class="back-btn" onclick="showStep('step3Exercise')">← بازگشت</button>
+        </section>
+
+        <!-- منوی جزوه -->
+        <section id="stepJozveMenu" class="hidden">
+            <h1>منوی جزوات 📚</h1>
+            <div class="options">
+                <div class="card" onclick="showStep('stepViewJozve')">
+                    <span class="icon">📄</span>
+                    <h3>فصل ۹</h3>
+                    <p style="font-size: 0.8rem; opacity: 0.7;">الکتریسیته</p>
+                </div>
+            </div>
+            <button class="back-btn" onclick="closeJozveMenu()">← بازگشت</button>
+        </section>
+
+        <!-- صفحه دانلود جزوه -->
+        <section id="stepViewJozve" class="hidden">
+            <h2>جزوه فصل ۹</h2>
+            <div class="exercise-box">
+                <p style="margin-bottom: 1.5rem;">فایل PDF جزوه را از اینجا دانلود کنید:</p>
+                <a href="jozve9.pdf" download="jozve9.pdf" class="btn btn-blue">📥 دانلود جزوه (PDF)</a>
+            </div>
+            <button class="back-btn" onclick="showStep('stepJozveMenu')">← بازگشت</button>
+        </section>
+
+        <!-- سوالات تمرین -->
+        <section id="step5Question" class="hidden">
+            <h2 id="qTitle">تمرین فیزیک</h2>
+            <div class="exercise-box" style="text-align: right;">
+                <p id="qText">...</p>
+                <div id="answerBox" class="answer-box"></div>
+            </div>
+            <div class="nav-btns">
+                <button class="btn btn-blue" onclick="prevQuestion()">قبلی</button>
+                <button class="btn btn-green" id="toggleBtn" onclick="toggleAnswer()">نمایش پاسخ</button>
+                <button class="btn btn-blue" onclick="nextQuestion()">بعدی</button>
+            </div>
+            <button class="back-btn" onclick="showStep('step4Chapters')">← توقف</button>
+        </section>
+
+        <!-- آزمون -->
+        <section id="stepExam" class="hidden">
+            <h2>آزمون فیزیک 📝</h2>
+            <div class="exam-info">
+                <span id="examProgress"></span>
+                <span id="examTimer"></span>
+            </div>
+            <div class="exercise-box" style="text-align: right;">
+                <p id="examQuestion"></p>
+                <textarea id="examAnswer" class="exam-answer-input" placeholder="پاسخت را بنویس..."></textarea>
+            </div>
+            <div class="nav-btns">
+                <button class="btn btn-blue" onclick="prevExamQuestion()">قبلی</button>
+                <button class="btn btn-blue" onclick="nextExamQuestion()">بعدی</button>
+                <button class="btn btn-green" onclick="askFinishExam()">پایان آزمون</button>
+            </div>
+        </section>
+
+        <!-- نتیجه آزمون -->
+        <section id="stepExamResult" class="hidden">
+            <h2>آزمون تمام شد ✅</h2>
+            <div id="examResults" style="max-height: 400px; overflow-y: auto;"></div>
+            <button class="back-btn" onclick="showStep('step2')">← بازگشت به منو</button>
+        </section>
+    </main>
+
+    <!-- پیام بخش شانسی -->
+    <div class="popup-overlay" id="popupOverlay" onclick="closePopup()">
+        <div class="popup" onclick="event.stopPropagation()">
+            <p>چون فعلاً فقط فصل ۹ تدریس شده، بخش شانسی فعال نیست.</p>
+            <button class="btn btn-blue" onclick="closePopup()">فهمیدم</button>
+        </div>
+    </div>
+
+    <!-- تنظیم تمرین -->
+    <div class="popup-overlay" id="practiceSetupPopup">
+        <div class="popup">
+            <h2>تنظیم تمرین</h2>
+            <label for="practicePool">کدام سوالات؟</label>
+            <select id="practicePool">
+                <option value="all">همه سوالات</option>
+                <option value="end">سوال اخر درسی</option>
+            </select>
+            <button class="btn btn-green" onclick="startExercise()">شروع</button>
+            <button class="btn btn-blue" onclick="closePracticeSetup()">انصراف</button>
+        </div>
+    </div>
+
+    <!-- تنظیم آزمون -->
+    <div class="popup-overlay" id="examSetupPopup">
+        <div class="popup">
+            <h2>تنظیم آزمون</h2>
+
+            <label for="examPool">نوع سوالات</label>
+            <select id="examPool">
+                <option value="all">همه سوالات</option>
+                <option value="end">سوال اخر درسی</option>
+            </select>
+
+            <label for="examCount">تعداد سوال</label>
+            <select id="examCount">
+                <option value="3">۳ سوال</option>
+                <option value="5">۵ سوال</option>
+                <option value="9">۹ سوال</option>
+            </select>
+
+            <label for="examMinutes">زمان (دقیقه)</label>
+            <select id="examMinutes">
+                <option value="5">۵</option>
+                <option value="10" selected>۱۰</option>
+                <option value="15">۱۵</option>
+                <option value="20">۲۰</option>
+            </select>
+
+            <button class="btn btn-green" onclick="confirmExamStart()">ادامه</button>
+            <button class="btn btn-blue" onclick="closeExamSetup()">انصراف</button>
+        </div>
+    </div>
+
+    <!-- تأیید شروع آزمون -->
+    <div class="popup-overlay" id="confirmStartPopup">
+        <div class="popup">
+            <p>از شروع آزمون مطمئن هستید؟</p>
+            <button class="btn btn-green" onclick="startExam()">بله، شروع</button>
+            <button class="btn btn-blue" onclick="closeConfirmStart()">خیر</button>
+        </div>
+    </div>
+
+    <!-- تأیید پایان آزمون -->
+    <div class="popup-overlay" id="finishExamPopup">
+        <div class="popup">
+            <p>آیا می‌خواهید آزمون را تمام کنید؟</p>
+            <button class="btn btn-green" onclick="finishExam()">بله</button>
+            <button class="btn btn-blue" onclick="closeFinishExam()">خیر</button>
+        </div>
+    </div>
+
+    <script>
+        const endLessonQuestions = [
+            { q: "بار الکتریکی هسته چیست ؟", a: "بار مثبت زیرا پروتون + نوترون مساوی مثبت" },
+            { q: "سنگین ترین نقطه اتم چیست؟", a: "هسته" },
+            { q: "سنگین ترین زره اتم چه نام دارد ؟", a: "نوترون" },
+            { q: "همه اجسام قبل از مالش چه باری دارند ؟", a: "خنثی" },
+            { q: "اورانیوم دارا 92 پروتون است ان دارای چند الکترون است؟", a: "92 چون خنثی است" },
+            { q: "اگر پارچه ابریشم را به شیشه مالش دهیم چه باری پیدا می کنند ؟", a: "ابریشم = منفی شیشه = مثبت" },
+            { q: "در مالش ابریشم بر شیشه کدام الکترون از دست می دهد ؟", a: "شیشه ان جسمی که بار مثبت دارد الکترون از دست داده" },
+            { q: "اگر یک جسم باردار را به یک جسم بی بار نزدیک کنیم چه می شود ؟", a: "همدیگر را جذب می کنند" },
+            { q: "اگر بادکنک را به مو سر مالش دهیم و به دیوار نزدیک کنیم چه رخ می دهد ؟", a: "به دیوار می چسبد زبرا یک جسم باردار یک جسم بی بار را جذب می کند" },
+            { q: "به وسیله میله پلاستیکی باردار در یک برق نما القا صورت می دهیم کلاهک و ورقه ها چه باری پیدا می کند ؟", a: "کلاهک مثبت و ورقه ها منفی" },
+            { q: "اگر میله شیشه ای باردار را به کلاهک برقنما بدون بار تماس دهیم کلاهک و ورقه ها چه باری پیدا می کنند؟", a: "مثبت" },
+            { q: "اگر میله پلاستیکی باردار را به برق نما بدون بار نزدیک کنیم کلاهک چه باری پیدا می کند؟", a: "کلاهک مثبت ورقه منفی" },
+            { q: "اگر مقاومت 5 برابر شود جریان چقدر می شود؟", a: "یک پنجم می شود" },
+            { q: "اگر مقاومت سه پنجم برابر شود شدت جریان برابر؟", a: "پنج سوم" },
+            { q: "اگر اختلاف پتانسیل دو سوم برابر شود شدت جریان چقدر می شود ؟", a: "دو سوم" },
+            { q: "اگر بخواهیم شدت جریان را افزایش دهیم باید این دو کار را انجام دهیم:", a: "افزایش اختلاف پتانسیل و کاهش مقاومت" },
+            { q: "چرا بهتر است وسایل برقی را به نزدیک ترین پریز وصل کنیم ؟", a: "چون نزدیک تر است و طول سیم کمتر است" },
+            { q: "د رانتخاب سیم انتن بهتر است از سیم کرمان معمولی یا سیم کرمان صادراتی استفاده کنیم ؟", a: "کرمان صادراتی چون مقاومت کمتر است" }
+        ];
+
+        const regularQuestions = [
+            { q: "اگر شانه پلاستیکی را به مو های سر خود مالش دهیم و به باریکه اب نزدیک کنیم چه رخ میدهد ؟", a: "مسیر اب منحرف می شود" },
+            { q: "اگر دو بادکنک را به پشمی مالش دهیم سپس پارچه ای به بادکنک ها نزدیک کنیم چه رخ می دهد ؟", a: "هدیگر را جذب می کنند زیرا دو بار غیر هم نام اند" },
+            { q: "اگر دو بادکنک را بعد از مالش به هم نزدیک کنیم چه می شود ؟", a: "همدیگر را  دفع می کنند" },
+            { q: "اگر دو جسم باردار را به هم نزدیک کنیم چه می شود ؟", a: "جذب یا دفع رخ می دهد" },
+            { q: "گلوله a گلوله B را دفع و گلوله C را دفع می کند", a: "a و C بار همنام اند گلوله a و b ناهمنام" },
+            { q: "ساده ترین روش باردار شدن اجسام نارسانا ؟", a: "روش مالش" },
+            { q: "چرا شانه پلاستیکی باردار وقتی به باریکه اب نزدیک می شود مسیر ان منحرف می شود ؟", a: "زیرا جسم باردار جسم بی بار را جذب می کند" },
+            { q: "دو بادکنک پلاستیکی را به پارچه پشمی مالش می دهم هرکدام چه باری پیدا می کند؟", a: "بادکنک بار منفی پارچه پشمی بار مثبت" },
+            { q: "چرا برق نما را در ظرف شیشه ای می گزاریم؟", a: "بار های مزاحم تاثیر نزارند جلوگیری ار نفوذ رطوبت" },
+            { q: "ازمایش های بار الکتریکی بهتر است در چه محیطی انجام شود؟", a: "محیط خشک" },
+            { q: "بار های الکتریکی عموما در کجا جمع می شوند", a: "سطح نقاط برجسته و تیز" },
+            { q: "اگر بخواهیم از برق نما برای تعیین رسانا یا نارسانا بودن جسم استفاده کنیم برقنما باید چه وضعیتی داشته باشند ؟", a: "باردار" },
+            { q: "برق نمایی دارای بار منفی است جسم بارداری را به کلاهک نزدیک می کنیم انحراف ورقه ها کمتر و می چسبند و دوباره دور می شوند نوع بار و مقدار ان را مشخص کنید.", a: "نوع بار مخالف و مقدار بار بیشتر از برق نما" },
+            { q: "اجسام نارسانا چطور باردار می شوند؟", a: "مالش" },
+            { q: "چرا در مدار الکتریکی نیاز به مولد داریم ؟", a: "ایجاد اختلاف پتانسیل تا باعث جاری شدن الکترون شود" }
+        ];
+
+        let currentPool = [];
+        let currentIndex = 0;
+        let examTimer = null;
+        let examEndTime = 0;
+        let examAnswers = [];
+
+        function showStep(id) {
+            document.querySelectorAll("main section").forEach(section => {
+                section.classList.add("hidden");
+            });
+            document.getElementById(id).classList.remove("hidden");
+        }
+
+        function openJozveMenu() {
+            document.body.classList.add("dark-theme");
+            showStep("stepJozveMenu");
+        }
+
+        function closeJozveMenu() {
+            document.body.classList.remove("dark-theme");
+            showStep("step2");
+        }
+
+        function openPopup() {
+            document.getElementById("popupOverlay").classList.add("show");
+        }
+
+        function closePopup() {
+            document.getElementById("popupOverlay").classList.remove("show");
+        }
+
+        function openPracticeSetup() {
+            document.getElementById("practiceSetupPopup").classList.add("show");
+        }
+
+        function closePracticeSetup() {
+            document.getElementById("practiceSetupPopup").classList.remove("show");
+        }
+
+        function shuffle(arr) {
+            const shuffled = [...arr];
+
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+
+            return shuffled;
+        }
+
+        function startExercise() {
+            const type = document.getElementById("practicePool").value;
+
+            currentPool = type === "all"
+                ? shuffle([...endLessonQuestions, ...regularQuestions])
+                : shuffle(endLessonQuestions);
+
+            currentIndex = 0;
+            closePracticeSetup();
+            showStep("step5Question");
+            updatePractice();
+        }
+
+        function updatePractice() {
+            document.getElementById("qText").innerText = currentPool[currentIndex].q;
+            document.getElementById("answerBox").innerText = "پاسخ: " + currentPool[currentIndex].a;
+            document.getElementById("answerBox").style.display = "none";
+            document.getElementById("toggleBtn").innerText = "نمایش پاسخ";
+        }
+
+        function toggleAnswer() {
+            const answerBox = document.getElementById("answerBox");
+            const shouldShow = answerBox.style.display === "none";
+
+            answerBox.style.display = shouldShow ? "block" : "none";
+            document.getElementById("toggleBtn").innerText =
+                shouldShow ? "مخفی کردن" : "نمایش پاسخ";
+        }
+
+        function nextQuestion() {
+            if (currentIndex < currentPool.length - 1) {
+                currentIndex++;
+                updatePractice();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updatePractice();
+            }
+        }
+
+        function openExamSetup() {
+            document.getElementById("examSetupPopup").classList.add("show");
+        }
+
+        function closeExamSetup() {
+            document.getElementById("examSetupPopup").classList.remove("show");
+        }
+
+        function confirmExamStart() {
+            closeExamSetup();
+            document.getElementById("confirmStartPopup").classList.add("show");
+        }
+
+        function closeConfirmStart() {
+            document.getElementById("confirmStartPopup").classList.remove("show");
+        }
+
+        function startExam() {
+            const type = document.getElementById("examPool").value;
+            const count = Number.parseInt(document.getElementById("examCount").value, 10);
+            const minutes = Number.parseInt(document.getElementById("examMinutes").value, 10);
+
+            const pool = type === "all"
+                ? [...endLessonQuestions, ...regularQuestions]
+                : [...endLessonQuestions];
+
+            currentPool = shuffle(pool).slice(0, count);
+            examAnswers = new Array(currentPool.length).fill("");
+            currentIndex = 0;
+            examEndTime = Date.now() + minutes * 60000;
+
+            closeConfirmStart();
+            showStep("stepExam");
+            updateExam();
+            tick();
+
+            clearInterval(examTimer);
+            examTimer = setInterval(tick, 1000);
+        }
+
+        function updateExam() {
+            document.getElementById("examProgress").innerText =
+                `سوال ${currentIndex + 1} از ${currentPool.length}`;
+            document.getElementById("examQuestion").innerText = currentPool[currentIndex].q;
+            document.getElementById("examAnswer").value = examAnswers[currentIndex];
+        }
+
+        function saveExamAnswer() {
+            examAnswers[currentIndex] = document.getElementById("examAnswer").value;
+        }
+
+        function tick() {
+            const remaining = Math.max(0, Math.floor((examEndTime - Date.now()) / 1000));
+            const minutes = Math.floor(remaining / 60);
+            const seconds = remaining % 60;
+
+            document.getElementById("examTimer").innerText =
+                `زمان: ${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+
+            if (remaining === 0) {
+                finishExam();
+            }
+        }
+
+        function nextExamQuestion() {
+            saveExamAnswer();
+
+            if (currentIndex < currentPool.length - 1) {
+                currentIndex++;
+                updateExam();
+            }
+        }
+
+        function prevExamQuestion() {
+            saveExamAnswer();
+
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateExam();
+            }
+        }
+
+        function askFinishExam() {
+            saveExamAnswer();
+            document.getElementById("finishExamPopup").classList.add("show");
+        }
+
+        function closeFinishExam() {
+            document.getElementById("finishExamPopup").classList.remove("show");
+        }
+
+        function finishExam() {
+            clearInterval(examTimer);
+            examTimer = null;
+
+            document.querySelectorAll(".popup-overlay").forEach(popup => {
+                popup.classList.remove("show");
+            });
+
+            const results = document.getElementById("examResults");
+            results.innerHTML = "";
+
+            currentPool.forEach((question, index) => {
+                const item = document.createElement("div");
+                item.className = "result-item";
+
+                const questionText = document.createElement("strong");
+                questionText.textContent = "سوال: " + question.q;
+
+                const userAnswer = document.createElement("p");
+                userAnswer.textContent = "پاسخ تو: " + (examAnswers[index] || "بدون پاسخ");
+
+                const correctAnswer = document.createElement("p");
+                correctAnswer.style.color = "green";
+                correctAnswer.textContent = "پاسخ صحیح: " + question.a;
+
+                item.append(questionText, userAnswer, correctAnswer);
+                results.appendChild(item);
+            });
+
+            showStep("stepExamResult");
+        }
+    </script>
+</body>
+</html>
